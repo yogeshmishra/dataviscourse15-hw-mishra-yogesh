@@ -40,7 +40,7 @@ Once you are signed up to the Piazza course forum, introduce yourself to your cl
 
 ## Problem 2 - Introduction to Git
 
-Attend the lecture on git and [follow the instructions on the homework](http://dataviscourse.net/2015/homework/) on setting up your **private** git repository for the homework. This involves creating a repository, sharing it with our gihtubh user [datavis-ta](http://github.com/datavis-ta), and announcing your project repository through [this form](https://docs.google.com/forms/d/1C7nljpvoRzbTrSxZAWuNZuiq-uI1cPIoBcERNTrYsDo/viewform). Be sure to follow all the instructions on the homework page!
+Attend the lecture on git and [follow the instructions on the homework](http://dataviscourse.net/2015/homework/) on setting up your **private** git repository for the homework. This involves creating a repository, sharing it with our github user [datavis-ta](http://github.com/datavis-ta), and announcing your project repository through [this form](https://docs.google.com/forms/d/1C7nljpvoRzbTrSxZAWuNZuiq-uI1cPIoBcERNTrYsDo/viewform). Be sure to follow all the instructions on the homework page!
 
 Edit the `README.md` file at the root of your respository to add your name and email address. Commit your changes.
 
