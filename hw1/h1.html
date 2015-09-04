@@ -4,20 +4,38 @@
     <meta charset="UTF-8">
     <title></title>
 	<style>
+		strong {
+            background-color: red;
+            font-size: 300%;
+        }
 		rect {
-		fill:steelblue; 
-		stroke:grey; 
-		stroke-width:.1px;
+			fill:steelblue; 
+			stroke:grey; 
+			stroke-width:.1px;
 		}
-		line {
-		stroke:black;
-		}{
+		polyline.areachart  {
+			fill:steelblue;
+			stroke:grey; 
+			stroke-width:.1px;
+        }
+        polyline.line{
+			fill:none;
+			stroke:grey; 
+			stroke-width:.1px;
+        }
+		
+		circle{
+			fill:steelblue;
+			stroke:grey; 
+			stroke-width:.1px;
+		}
 	</style>
 </head>
 <body>
-<h1> "bar chart of Anascobe's cubic" </h1>
-<svg width="800" height="400">
+
+<svg width="800" height="2000">
 	<text x="20" y="20"> Anscombe's quartett representation as Bar Chart </text>
+	
 	<g transform="translate(0, 400) scale(20, -20)">
 		<rect  x="1"  y="0" width="1" height="10.0" />
 		<rect  x="2"  y="0" width="1" height="8.0"  />
@@ -31,6 +49,7 @@
 		<rect  x="10" y="0" width="1" height="7.0"  />
 		<rect  x="11" y="0" width="1" height="5.0"  />
 	</g>
+	
 	<g transform="translate(400, 400) scale(20, -20)">
 		<rect  x="1"  y="0" width="1" height="9.14" />
 		<rect  x="2"  y="0" width="1" height="8.14" />
@@ -44,6 +63,27 @@
 		<rect  x="10" y="0" width="1" height="7.26" />
 		<rect  x="11" y="0" width="1" height="4.74" />	
 	</g>
+	
+	<g transform="translate(0, 800) scale(20, -20)">
+		<polyline class = "line" points=" 1,10.0 2,8 3,13.0 4,9.0 5,11.0 6,14.0 7,6.0 8,4.0 
+		9,12.0 10,7.0 11,5.0 " />
+	</g>
+	
+	<g transform="translate(400, 800) scale(20, -20)">
+		<polyline class = "line" points=" 1,9.14 2,8.14 3,8.74 4,8.77 5,9.26 6,8.10 7,6.13 
+		8,3.10 9,9.13 10,7.26 11,4.74 " />
+	</g>
+	
+	<g transform="translate(0, 1200) scale(20, -20)">
+		<polyline class = "areachart" points=" 1,0 1,10.0 2,8 3,13.0 4,9.0 5,11.0 6,14.0 7,6.0 8,4.0 
+		9,12.0 10,7.0 11,5.0 11,0" />
+	</g>
+	
+	<g transform="translate(400, 1200) scale(20, -20)">
+		<polyline class = "areachart" points=" 1,0 1,9.14 2,8.14 3,8.74 4,8.77 5,9.26 6,8.10 7,6.13 
+		8,3.10 9,9.13 10,7.26 11,4.74 11,0" />
+	</g>
+	
 </svg>
 </body>
 </html>
