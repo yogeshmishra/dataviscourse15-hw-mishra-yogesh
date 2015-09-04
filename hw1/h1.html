@@ -5,8 +5,7 @@
     <title></title>
 	<style>
 		strong {
-            background-color: red;
-            font-size: 300%;
+            font-size: 200%;
         }
 		rect {
 			fill:steelblue; 
@@ -33,8 +32,10 @@
 </head>
 <body>
 
+<p> <strong> Anscombe's quartett </strong></p>
+
 <svg width="800" height="2000">
-	<text x="20" y="20"> Anscombe's quartett representation as Bar Chart </text>
+	<text x="20" y="50"> Bar Chart of X coordinates  </text>
 	
 	<g transform="translate(0, 400) scale(20, -20)">
 		<rect  x="1"  y="0" width="1" height="10.0" />
@@ -50,6 +51,8 @@
 		<rect  x="11" y="0" width="1" height="5.0"  />
 	</g>
 	
+	<text x="420" y="50"> Bar Chart of Y coordinates  </text>
+	
 	<g transform="translate(400, 400) scale(20, -20)">
 		<rect  x="1"  y="0" width="1" height="9.14" />
 		<rect  x="2"  y="0" width="1" height="8.14" />
@@ -64,27 +67,32 @@
 		<rect  x="11" y="0" width="1" height="4.74" />	
 	</g>
 	
-	<g transform="translate(0, 800) scale(20, -20)">
+	<text x="20" y="550"> Line Chart of X coordinates  </text>
+	<g transform="translate(0, 900) scale(20, -20)">
 		<polyline class = "line" points=" 1,10.0 2,8 3,13.0 4,9.0 5,11.0 6,14.0 7,6.0 8,4.0 
 		9,12.0 10,7.0 11,5.0 " />
 	</g>
 	
-	<g transform="translate(400, 800) scale(20, -20)">
+	<text x="420" y="550"> Line Chart of Y coordinates  </text>
+	<g transform="translate(400, 900) scale(20, -20)">
 		<polyline class = "line" points=" 1,9.14 2,8.14 3,8.74 4,8.77 5,9.26 6,8.10 7,6.13 
 		8,3.10 9,9.13 10,7.26 11,4.74 " />
 	</g>
 	
-	<g transform="translate(0, 1200) scale(20, -20)">
+	<text x="20" y="950"> Area Chart of X coordinates  </text>
+	<g transform="translate(0, 1300) scale(20, -20)">
 		<polyline class = "areachart" points=" 1,0 1,10.0 2,8 3,13.0 4,9.0 5,11.0 6,14.0 7,6.0 8,4.0 
 		9,12.0 10,7.0 11,5.0 11,0" />
 	</g>
 	
-	<g transform="translate(400, 1200) scale(20, -20)">
+	<text x="420" y="950"> Area Chart of Y coordinates  </text>
+	<g transform="translate(400, 1300) scale(20, -20)">
 		<polyline class = "areachart" points=" 1,0 1,9.14 2,8.14 3,8.74 4,8.77 5,9.26 6,8.10 7,6.13 
 		8,3.10 9,9.13 10,7.26 11,4.74 11,0" />
 	</g>
 	
-	<g transform="translate(0, 1700) scale(20, -20)">
+	<text x="150" y="1380"> Scatterplot of Data  </text>
+	<g transform="translate(0, 1800) scale(20, -20)">
 		<polyline class = "line" points=" 0,0 0,20 20,20 20,0 0,0"/>
 	    <circle cx="4.0"   cy="3.10" r=".5" />
 		<circle cx="5.0"   cy="4.74" r=".5" />
