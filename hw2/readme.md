@@ -63,7 +63,7 @@ When you are finished implementing this section of the code, changing the datase
 
 We focus on interactivity in this class; you will usually implement interactivity with Javascript.
 
-First, make any bar in either bar chart change color when the mouse hovers over it. Your can implemented this either with CSS' hover properties or with D3/JavaScript, whichever you prefer. 
+First, make any bar in either bar chart change color when the mouse hovers over it using JavaScript. You will notice that the template already includes a hover effect using CSS, however, this can't be used to, e.g., trigger synchronized highlighting in other views.
 
 Your second interactive component will be to use D3 to listen for clicks on each scatterplot point - when clicked, the browser should log the x and y coordinates of that point to the console.
 
