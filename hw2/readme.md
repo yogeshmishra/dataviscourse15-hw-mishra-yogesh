@@ -39,7 +39,7 @@ You should also take this opportunity to make the ``select`` menu call the ``cha
 
 ## Part II: Javascript
 
-Now that ``staircase()`` is getting called, let's make it do something. Fill out the stub so that the bars of the first bar chart look like this, **only using Javascript** (no D3 yet!):
+Now that ``staircase()`` is getting called, let's make it do something. Fill out the stub so that the existing rectangles in the first bar chart look like this, **only using Javascript** (no D3 yet!):
 
 ![Bar chart](figures/staircase.png)
 
