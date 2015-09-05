@@ -1,5 +1,5 @@
 #CS-5630 / CS-6630 Homework 2
-*Due: Friday, September 11, 11:59 pm. Value: 8%*
+*Due: Friday, September 11, 11:59 pm. Value: 6%*
 
 In this assignment you will make the charts developed for Homework 1 interactive with Javascript and d3.js.
 
