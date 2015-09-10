@@ -28,19 +28,19 @@ Implement your solution in a file called ``hw1.html``, which you should store in
 
 You can choose your design parameters freely, i.e., things like the color, aspect ratio and size of your charts is up to you. You need to make sure, however, that the data can be clearly read. Note that you will probably need to make some kind of transformation to the data to achieve pleasant results.  
 
-You must use selectors to style your SVG elements, i.e., you should not use inline styling. You should also not to use classes or identifiers more than necessary for each chart, i.e., one class definition per chart should be sufficient.  There are good reasons to use both, css class selectors and element selectors in this homework.
+You must use selectors to style your SVG elements, i.e., you should not use inline styling. You should also not use classes or identifiers more than necessary for each chart, i.e., one class definition per chart should be sufficient.  There are good reasons to use both, css class selectors and element selectors in this homework.
 
-Make sure your submission is valid HTML5. Check that it is valid by uploading it to the [W3C HTML Validator](https://validator.w3.org/#validate_by_upload).
+Make sure your submission is a valid HTML5 file. Check that it is valid by uploading it to the [W3C HTML Validator](https://validator.w3.org/#validate_by_upload).
 
 ### Bar Charts
 
-Create a bar chart for both, the X and the Y dimension of the data. Your bars should be aligned at the bottom and point upwards. Here is how your bars could look like:
+Create a bar chart for both, the X and the Y dimensions of the data. Your bars should be aligned at the bottom and point upwards. Here is how your bars could look like:
 
 ![Bar chart](figures/bars.png)
 
 ### Line Charts
 
-Create a line chart for both, the X and the Y dimension of the data. Your y-axis should have 0 at the bottom. Create the line chart for the X dimension out of a path element, and the chart for the Y dimension out of SVG line elements. An example of the line charts:
+Create a line chart for both, the X and the Y dimensions of the data. Your y-axis should have 0 at the bottom. Create the line chart for the X dimension out of a path element, and the line chart for the Y dimension out of SVG line elements. An example of the line charts:
 
 ![Line chart](figures/lines.png)
 
