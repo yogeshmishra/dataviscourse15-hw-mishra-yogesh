@@ -147,11 +147,17 @@ function update(error, data) {
             return aScale(d.a);
         });
 
-
-    var svgline = d3.select("#lineX");
-    svgline.append("path")
-        .style("class", "lines")
+    var svgLine = d3.select("#lineX");
+    alert("line2");
+    var svgLineX = svgLine.selectAll("path");
+    alert("line3");
+    svgLineX.style("class", "lines")
         .attr("d", aLineGenerator(data));
+
+    //var svgline = d3.select("#lineX");
+    //svgline.append("path")
+    //    .style("class", "lines")
+    //    .attr("d", aLineGenerator(data));
 
 
     // TODO: Select and update the 'b' line chart path (create your own generator)
