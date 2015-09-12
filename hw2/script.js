@@ -73,14 +73,15 @@ function update(error, data) {
     // the data binding
 
     bars.attr("x", function(d , i) {
-            return i*10;
+             return iScale(i+1)
+            //return i*10;
         })
         .attr("y", 0)
-        .attr("width",10)
+        .attr("width", 10)
         .attr("height", function(d , i){
-            return d.a *10;
+            return aScale(d.a);
         })
-        .style("fill", "steelblue")
+        .style("fill", "barChart")
 
     // how do we handle new elements?
     // we start with a transparent gray bar of width 0
@@ -121,7 +122,19 @@ function update(error, data) {
 
     //**************************************************************
     // TODO: Select and update the 'b' bar chart bars
+    var svgY = d3.select("#barChartY")
+    var barsY = svgY.selectAll("rect").data(data)
+    // the data binding
 
+    barsY.attr("x", function(d , i) {
+        return iScale(i+1);
+         })
+        .attr("y", 0)
+        .attr("width",10)
+        .attr("height", function(d , i){
+            return bScale(d.b);
+        })
+        .style("class", "barChart")
     // TODO: Select and update the 'a' line chart path using this line generator
     var aLineGenerator = d3.svg.line()
         .x(function (d, i) {
