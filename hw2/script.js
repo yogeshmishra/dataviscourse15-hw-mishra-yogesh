@@ -68,8 +68,8 @@ function update(error, data) {
     // ****** TODO: PART III (you will also edit in PART V) ******
 
     // TODO: Select and update the 'a' bar chart bars
-    var svg = d3.select("#barChartX")
-    var bars = svg.selectAll("rect").data(data)
+    var svg = d3.select("#barChartX");
+    var bars = svg.selectAll("rect").data(data);
     // the data binding
 
     bars.enter().append("rect")
@@ -79,19 +79,9 @@ function update(error, data) {
         .attr("y", 0)
         .attr("width", 10)
         .attr("height", 0)
-        .attr("opacity", 0)
+        .attr("opacity", 0);
 
 
- /*   bars.attr("x", function(d , i) {
-             return iScale(i+1)
-            //return i*10;
-        })
-        .attr("y", 0)
-        .attr("width", 10)
-        .attr("height", function(d , i){
-            return aScale(d.a);
-        })
-        .style("fill", "barChart")*/
 
     bars.transition()
         .duration(3000)
@@ -112,49 +102,13 @@ function update(error, data) {
         .duration(3000)
         .attr("opacity", 0)
         .remove();
-    // how do we handle new elements?
-    // we start with a transparent gray bar of width 0
-  /*  bars.enter().append("rect")
-        .attr("x", function(d , i){
-        return iScale(i + 1)
-        })
-        .attr("y", 0)
-        .attr("width", 10)
-        .attr("height", 0)
-        .attr("opacity", 0)
-        .classed("bars", true);
 
 
-    // how do we handle updates?
-    // we transition towards a blue opaque bar with a data driven width
-    bars.transition()
-        .duration(3000)
-        .attr("x", function(d , i){
-            return iScale(i + 1)
-        })
-        .attr("y", 0)
-        .attr("width",10)
-        .attr("height", function(d , i) {
-            return iScale(d)
-        })
-        .style("fill", "steelblue")
-        .attr("opacity", 1);
-
-    // how do we handle things that are removed?
-    // we increase opacity
-    bars.exit()
-        .attr("opacity", 1)
-        .transition()
-        .duration(3000)
-        .attr("opacity", 0)
-        .remove();*/
-
-    //**************************************************************
     // TODO: Select and update the 'b' bar chart bars
-    var svgY = d3.select("#barChartY")
+    var svgY = d3.select("#barChartY");
     // the data binding
 
-    var barsY = svgY.selectAll("rect").data(data)
+    var barsY = svgY.selectAll("rect").data(data);
     barsY.enter().append("rect")
         .attr("x", function(d , i){
             return iScale(i + 1)
@@ -162,7 +116,7 @@ function update(error, data) {
         .attr("y", 0)
         .attr("width", 10)
         .attr("height", 0)
-        .attr("opacity", 0)
+        .attr("opacity", 0);
 
     barsY.transition()
         .duration(3000)
@@ -177,13 +131,13 @@ function update(error, data) {
         .style("class", "barChart")
         .attr("opacity", 1);
 
-    bars.exit()
+    barsY.exit()
         .attr("opacity", 1)
         .transition()
         .duration(3000)
         .attr("opacity", 0)
         .remove();
-    
+
     // TODO: Select and update the 'a' line chart path using this line generator
     var aLineGenerator = d3.svg.line()
         .x(function (d, i) {
@@ -192,6 +146,13 @@ function update(error, data) {
         .y(function (d) {
             return aScale(d.a);
         });
+
+
+    var svgline = d3.select("#lineX");
+    svgline.append("path")
+        .style("class", "lines")
+        .attr("d", aLineGenerator(data));
+
 
     // TODO: Select and update the 'b' line chart path (create your own generator)
 
