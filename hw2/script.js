@@ -156,7 +156,7 @@ function update(error, data) {
     // TODO: Select and update the 'b' line chart path (create your own generator)
 
     var svgLine = d3.select("#lineY");
-    var svgLineY = svgLine.selectAll("line").data(data);
+    var svgLineY = svgLine.selectAll("line");
     svgLineY.attr("x1", function(d , i){
             return iScale(i + 1);
             })
@@ -205,7 +205,15 @@ function update(error, data) {
         .attr("d", bAreaGenerator(data));
 
     // TODO: Select and update the scatterplot points
-
+    svgCircle = d3.select("#CircleH").selectAll("circle").data(data);
+    svgCircle.attr("cx", function(d , i){
+                    return aScale(d.a);
+                    })
+                    .attr("cy", function(d ,i){
+                    return bScale(d.b);
+                    })
+                    .attr("r", 5)
+                    .attr("class", "circle");
     // ****** TODO: PART IV ******
 }
 
