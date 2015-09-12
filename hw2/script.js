@@ -3,7 +3,6 @@
 
 function staircase() {
     // ****** TODO: PART II ******
-    alert("done loading the JS1");
     var svg_parentX = document.getElementById("barChartX");
     var svg_kidsX = svg_parentX.childNodes;
     var noofRectangle = 0;
@@ -12,7 +11,7 @@ function staircase() {
         if (rect.nodeType!=1) continue; // skip anything that isn't an element
         rect.setAttribute("height", ((noofRectangle*10) + 10).toString());
         noofRectangle++;
-        }
+    }
     noofRectangle = 0;
     var svg_parentY = document.getElementById("barChartY");
     var svg_kidsY = svg_parentY.childNodes;
@@ -102,6 +101,8 @@ function update(error, data) {
         .duration(3000)
         .attr("opacity", 0)
         .remove();
+
+    //// TODO: Select and update the 'b' bar chart bars
 
     var svgY = d3.select("#barChartY");
     var barsY = svgY.selectAll("rect").data(data);
@@ -199,19 +200,16 @@ function update(error, data) {
         .remove();
 
     var OnMouseTouch = document.getElementsByTagName("circle");
-    console.log("no of circk = ", OnMouseTouch.length);
     for(var j = 0; j < OnMouseTouch.length; j++)
     {
         OnMouseTouch[j].addEventListener("mouseover", mouseTouch);
-        //OnMouseHover[i].addEventListener("mouseout", mouseOut);
     }
     var touch = 0;
     function mouseTouch(event) {
-       console.log("Co-Ordinates of (x,y) = ",  event.srcElement.getAttribute("cx"), event.srcElement.getAttribute("cy"));
+       console.log("Co-Ordinates of (x,y) = (",  event.srcElement.getAttribute("cx"), "," ,
+           event.srcElement.getAttribute("cy"), ")");
     }
-    /*function mouseOut(event) {
-        event.srcElement.setAttribute("fill","steelblue");
-    }*/
+
 // TODO: Select and update the 'a' line chart path using this line generator
     var aLineGenerator = d3.svg.line()
         .x(function (d, i) {
@@ -230,25 +228,20 @@ function update(error, data) {
 
 
     // TODO: Select and update the 'b' line chart path (create your own generator)
+    var bLineGenerator = d3.svg.line()
+        .x(function (d, i) {
+            return iScale(i);
+        })
+        .y(function (d) {
+            return aScale(d.b);
+        });
 
-    //// TODO: Select and update the 'b' bar chart bars
-    //// the data binding
-  /*  var svgLine = d3.select("#lineY");
-    var svgLineY = svgLine.selectAll("line");
-    svgLineY.attr("x1", function(d , i){
-            return iScale(i + 1);
-            })
-            .attr("x2", function(d ,i){
-            return iScale(i +2);
-            })
-            .attr("y1", function(d, i){
-            return bScale(data[i].b);
-            })
-            .attr("y2", function(d ,i){
-            return bScale(data[i+1].b);
-            })
-            .attr("class", "line");
-*/
+    var svgPathY = d3.select("#lineY");
+    var svgLineY = svgPathY.selectAll("path").data(data);
+
+    svgLineY
+        .style("class", "lines")
+        .attr("d", bLineGenerator(data));
 
     // TODO: Select and update the 'a' area chart path using this line generator
     var aAreaGenerator = d3.svg.area()
@@ -279,24 +272,7 @@ function update(error, data) {
     var svgAreaB = d3.select("#areaY");
     var svgAreaY = svgAreaB.selectAll("path");
     svgAreaY.style("class", "areas")
-        .attr("d", bAreaGenerator(data))
-        .attr("opacity", 0)
-        .transition()
-        .duration(3000)
-        .attr("opacity", 1);
-
-    /*svgAreaY.transition()
-        .duration(3000)
-        .style("class", "areas")
-        .attr("d", bAreaGenerator(data))
-      */
-
-    svgAreaY.exit()
-        .attr("opacity", 1)
-        .transition()
-        .duration(3000)
-        .attr("opacity", 0)
-        .remove();
+        .attr("d", bAreaGenerator(data));
     // ****** TODO: PART IV ******
 }
 
