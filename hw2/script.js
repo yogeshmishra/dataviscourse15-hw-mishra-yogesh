@@ -67,14 +67,14 @@ function update(error, data) {
 
     // ****** TODO: PART III (you will also edit in PART V) ******
 
+
     // TODO: Select and update the 'a' bar chart bars
     var svg = d3.select("#barChartX");
     var bars = svg.selectAll("rect").data(data);
     // the data binding
-
     bars.enter().append("rect")
         .attr("x", function(d , i){
-            return iScale(i + 1)
+            return ((i+1)*10);
         })
         .attr("y", 0)
         .attr("width", 10)
@@ -82,11 +82,10 @@ function update(error, data) {
         .attr("opacity", 0);
 
 
-
     bars.transition()
         .duration(3000)
         .attr("x", function(d , i){
-            return iScale(i + 1)
+            return ((i+1)*10);
         })
         .attr("y", 0)
         .attr("width",10)
@@ -96,6 +95,7 @@ function update(error, data) {
         .style("class", "barChart")
         .attr("opacity", 1);
 
+
     bars.exit()
         .attr("opacity", 1)
         .transition()
@@ -103,15 +103,12 @@ function update(error, data) {
         .attr("opacity", 0)
         .remove();
 
-
-    // TODO: Select and update the 'b' bar chart bars
     var svgY = d3.select("#barChartY");
-    // the data binding
-
     var barsY = svgY.selectAll("rect").data(data);
+
     barsY.enter().append("rect")
         .attr("x", function(d , i){
-            return iScale(i + 1)
+            return ((i+1)*10);
         })
         .attr("y", 0)
         .attr("width", 10)
@@ -121,7 +118,7 @@ function update(error, data) {
     barsY.transition()
         .duration(3000)
         .attr("x", function(d , i){
-            return iScale(i + 1)
+            return ((i+1)*10);
         })
         .attr("y", 0)
         .attr("width",10)
@@ -138,7 +135,84 @@ function update(error, data) {
         .attr("opacity", 0)
         .remove();
 
-    // TODO: Select and update the 'a' line chart path using this line generator
+    //Event Listners for Rectangle
+
+    var OnMouseHover = document.getElementsByTagName("rect");
+    for(var i = 0; i < OnMouseHover.length; i++)
+    {
+        OnMouseHover[i].addEventListener("mouseover", mouseOver);
+        OnMouseHover[i].addEventListener("mouseout", mouseOut);
+    }
+    function mouseOver(event) {
+        event.srcElement.setAttribute("fill","red");
+    }
+    function mouseOut(event) {
+        event.srcElement.setAttribute("fill","steelblue");
+    }
+
+    // TODO: Select and update the scatterplot points
+    var svgCircle = d3.select("#CircleH");
+    var circleData = svgCircle.selectAll("circle").data(data);
+
+    circleData
+        .attr("cx", function(d){
+        return aScale(d.a);
+        }).
+        attr("cy", function(d){
+            return bScale(d.b);
+        })
+        .attr("r", 0)
+        .attr("opacity", 1)
+        .attr("class", "circle");
+
+    circleData.
+        enter()
+        .append("circle")
+        .attr("cx", function(d){
+            return aScale(d.a);
+        }).
+        attr("cy", function(d){
+            return bScale(d.b);
+        })
+        .attr("r", 0)
+        .attr("opacity", 0)
+        .attr("class", "circle");
+
+    circleData.transition()
+        .duration(3000)
+        .attr("cx", function(d , i){
+        return aScale(d.a);
+        })
+        .attr("cy", function(d ,i){
+            return bScale(d.b);
+        })
+        .attr("r", 5)
+        .attr("class", "circle")
+        .attr("opacity", 1);
+
+    circleData.
+        exit()
+        .attr("opacity", 1)
+        .transition()
+        .duration(3000)
+        .attr("opacity", 0)
+        .remove();
+
+    var OnMouseTouch = document.getElementsByTagName("circle");
+    console.log("no of circk = ", OnMouseTouch.length);
+    for(var j = 0; j < OnMouseTouch.length; j++)
+    {
+        OnMouseTouch[j].addEventListener("mouseover", mouseTouch);
+        //OnMouseHover[i].addEventListener("mouseout", mouseOut);
+    }
+    var touch = 0;
+    function mouseTouch(event) {
+       console.log("Co-Ordinates of (x,y) = ",  event.srcElement.getAttribute("cx"), event.srcElement.getAttribute("cy"));
+    }
+    /*function mouseOut(event) {
+        event.srcElement.setAttribute("fill","steelblue");
+    }*/
+// TODO: Select and update the 'a' line chart path using this line generator
     var aLineGenerator = d3.svg.line()
         .x(function (d, i) {
             return iScale(i);
@@ -148,14 +222,18 @@ function update(error, data) {
         });
 
     var svgPath = d3.select("#lineX");
-    var svgLineX = svgPath.selectAll("path");
-    alert("line3");
-    svgLineX.style("class", "lines")
+    var svgLineX = svgPath.selectAll("path").data(data);
+
+    svgLineX
+        .style("class", "lines")
         .attr("d", aLineGenerator(data));
+
 
     // TODO: Select and update the 'b' line chart path (create your own generator)
 
-    var svgLine = d3.select("#lineY");
+    //// TODO: Select and update the 'b' bar chart bars
+    //// the data binding
+  /*  var svgLine = d3.select("#lineY");
     var svgLineY = svgLine.selectAll("line");
     svgLineY.attr("x1", function(d , i){
             return iScale(i + 1);
@@ -167,10 +245,10 @@ function update(error, data) {
             return bScale(data[i].b);
             })
             .attr("y2", function(d ,i){
-            return bScale(data[i + 1].b);
+            return bScale(data[i+1].b);
             })
             .attr("class", "line");
-
+*/
 
     // TODO: Select and update the 'a' area chart path using this line generator
     var aAreaGenerator = d3.svg.area()
@@ -200,20 +278,25 @@ function update(error, data) {
 
     var svgAreaB = d3.select("#areaY");
     var svgAreaY = svgAreaB.selectAll("path");
-    alert("line3");
     svgAreaY.style("class", "areas")
-        .attr("d", bAreaGenerator(data));
+        .attr("d", bAreaGenerator(data))
+        .attr("opacity", 0)
+        .transition()
+        .duration(3000)
+        .attr("opacity", 1);
 
-    // TODO: Select and update the scatterplot points
-    svgCircle = d3.select("#CircleH").selectAll("circle").data(data);
-    svgCircle.attr("cx", function(d , i){
-                    return aScale(d.a);
-                    })
-                    .attr("cy", function(d ,i){
-                    return bScale(d.b);
-                    })
-                    .attr("r", 5)
-                    .attr("class", "circle");
+    /*svgAreaY.transition()
+        .duration(3000)
+        .style("class", "areas")
+        .attr("d", bAreaGenerator(data))
+      */
+
+    svgAreaY.exit()
+        .attr("opacity", 1)
+        .transition()
+        .duration(3000)
+        .attr("opacity", 0)
+        .remove();
     // ****** TODO: PART IV ******
 }
 
