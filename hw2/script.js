@@ -182,7 +182,27 @@ function update(error, data) {
             return aScale(d.a);
         });
 
+
+    var svgArea = d3.select("#areaX");
+    var svgAreaX = svgArea.selectAll("path");
+    svgAreaX.style("class", "areas")
+        .attr("d", aAreaGenerator(data));
+
     // TODO: Select and update the 'b' area chart path (create your own generator)
+    var bAreaGenerator = d3.svg.area()
+        .x(function (d, i) {
+            return iScale(i);
+        })
+        .y0(0)
+        .y1(function (d) {
+            return bScale(d.b);
+        });
+
+    var svgAreaB = d3.select("#areaY");
+    var svgAreaY = svgAreaB.selectAll("path");
+    alert("line3");
+    svgAreaY.style("class", "areas")
+        .attr("d", bAreaGenerator(data));
 
     // TODO: Select and update the scatterplot points
 
