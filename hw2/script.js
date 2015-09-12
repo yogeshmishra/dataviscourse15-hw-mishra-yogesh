@@ -147,20 +147,30 @@ function update(error, data) {
             return aScale(d.a);
         });
 
-    var svgLine = d3.select("#lineX");
-    alert("line2");
-    var svgLineX = svgLine.selectAll("path");
+    var svgPath = d3.select("#lineX");
+    var svgLineX = svgPath.selectAll("path");
     alert("line3");
     svgLineX.style("class", "lines")
         .attr("d", aLineGenerator(data));
 
-    //var svgline = d3.select("#lineX");
-    //svgline.append("path")
-    //    .style("class", "lines")
-    //    .attr("d", aLineGenerator(data));
-
-
     // TODO: Select and update the 'b' line chart path (create your own generator)
+
+    var svgLine = d3.select("#lineY");
+    var svgLineY = svgLine.selectAll("line").data(data);
+    svgLineY.attr("x1", function(d , i){
+            return iScale(i + 1);
+            })
+            .attr("x2", function(d ,i){
+            return iScale(i +2);
+            })
+            .attr("y1", function(d, i){
+            return bScale(data[i].b);
+            })
+            .attr("y2", function(d ,i){
+            return bScale(data[i + 1].b);
+            })
+            .attr("class", "line");
+
 
     // TODO: Select and update the 'a' area chart path using this line generator
     var aAreaGenerator = d3.svg.area()
