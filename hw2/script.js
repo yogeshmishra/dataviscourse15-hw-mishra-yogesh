@@ -162,7 +162,7 @@ function update(error, data) {
         attr("cy", function(d){
             return bScale(d.b);
         })
-        .attr("r", 0)
+        .attr("r", 5)
         .attr("opacity", 1)
         .attr("class", "circle");
 
@@ -175,28 +175,11 @@ function update(error, data) {
         attr("cy", function(d){
             return bScale(d.b);
         })
-        .attr("r", 0)
-        .attr("opacity", 0)
-        .attr("class", "circle");
-
-    circleData.transition()
-        .duration(3000)
-        .attr("cx", function(d , i){
-        return aScale(d.a);
-        })
-        .attr("cy", function(d ,i){
-            return bScale(d.b);
-        })
         .attr("r", 5)
-        .attr("class", "circle")
-        .attr("opacity", 1);
+        .attr("class", "circle");
 
     circleData.
         exit()
-        .attr("opacity", 1)
-        .transition()
-        .duration(3000)
-        .attr("opacity", 0)
         .remove();
 
     var OnMouseTouch = document.getElementsByTagName("circle");
@@ -204,7 +187,6 @@ function update(error, data) {
     {
         OnMouseTouch[j].addEventListener("mouseover", mouseTouch);
     }
-    var touch = 0;
     function mouseTouch(event) {
        console.log("Co-Ordinates of (x,y) = (",  event.srcElement.getAttribute("cx"), "," ,
            event.srcElement.getAttribute("cy"), ")");
