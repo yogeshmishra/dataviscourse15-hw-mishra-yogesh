@@ -4,7 +4,7 @@
 function staircase() {
     // ****** TODO: PART II ******
     alert("done loading the JS1");
-    var svg_parentX = document.getElementById("BarChartX");
+    var svg_parentX = document.getElementById("barChartX");
     var svg_kidsX = svg_parentX.childNodes;
     var noofRectangle = 0;
     for (var i=0, len=svg_kidsX.length;i<len;++i){
@@ -14,7 +14,7 @@ function staircase() {
         noofRectangle++;
         }
     noofRectangle = 0;
-    var svg_parentY = document.getElementById("#BarChartY");
+    var svg_parentY = document.getElementById("barChartY");
     var svg_kidsY = svg_parentY.childNodes;
     for (var i=0, len=svg_kidsY.length;i<len;++i){
         var rect = svg_kidsY[i];
