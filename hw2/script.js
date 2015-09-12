@@ -3,6 +3,25 @@
 
 function staircase() {
     // ****** TODO: PART II ******
+    alert("done loading the JS1");
+    var svg_parentX = document.getElementById("BarChartX");
+    var svg_kidsX = svg_parentX.childNodes;
+    var noofRectangle = 0;
+    for (var i=0, len=svg_kidsX.length;i<len;++i){
+        var rect = svg_kidsX[i];
+        if (rect.nodeType!=1) continue; // skip anything that isn't an element
+        rect.setAttribute("height", ((noofRectangle*10) + 10).toString());
+        noofRectangle++;
+        }
+    noofRectangle = 0;
+    var svg_parentY = document.getElementById("#BarChartY");
+    var svg_kidsY = svg_parentY.childNodes;
+    for (var i=0, len=svg_kidsY.length;i<len;++i){
+        var rect = svg_kidsY[i];
+        if (rect.nodeType!=1) continue; // skip anything that isn't an element
+        rect.setAttribute("height", ((noofRectangle*10) + 10).toString());
+        noofRectangle++;
+    }
 }
 
 function update(error, data) {
@@ -41,6 +60,7 @@ function update(error, data) {
             return d.b;
         })])
         .range([0, 150]);
+
     var iScale = d3.scale.linear()
         .domain([0, data.length])
         .range([0, 110]);
@@ -48,7 +68,58 @@ function update(error, data) {
     // ****** TODO: PART III (you will also edit in PART V) ******
 
     // TODO: Select and update the 'a' bar chart bars
+    var svg = d3.select("#barChartX")
+    var bars = svg.selectAll("rect").data(data)
+    // the data binding
 
+    bars.attr("x", function(d , i) {
+            return i*10;
+        })
+        .attr("y", 0)
+        .attr("width",10)
+        .attr("height", function(d , i){
+            return d.a *10;
+        })
+        .style("fill", "steelblue")
+
+    // how do we handle new elements?
+    // we start with a transparent gray bar of width 0
+  /*  bars.enter().append("rect")
+        .attr("x", function(d , i){
+        return iScale(i + 1)
+        })
+        .attr("y", 0)
+        .attr("width", 10)
+        .attr("height", 0)
+        .attr("opacity", 0)
+        .classed("bars", true);
+
+
+    // how do we handle updates?
+    // we transition towards a blue opaque bar with a data driven width
+    bars.transition()
+        .duration(3000)
+        .attr("x", function(d , i){
+            return iScale(i + 1)
+        })
+        .attr("y", 0)
+        .attr("width",10)
+        .attr("height", function(d , i) {
+            return iScale(d)
+        })
+        .style("fill", "steelblue")
+        .attr("opacity", 1);
+
+    // how do we handle things that are removed?
+    // we increase opacity
+    bars.exit()
+        .attr("opacity", 1)
+        .transition()
+        .duration(3000)
+        .attr("opacity", 0)
+        .remove();*/
+
+    //**************************************************************
     // TODO: Select and update the 'b' bar chart bars
 
     // TODO: Select and update the 'a' line chart path using this line generator
