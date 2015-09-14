@@ -1,7 +1,7 @@
 #CS-5630 / CS-6630 Homework 3
 *Due: Friday, September 25, 11:59 pm. Value: 6%*
 
-In this assignment you will make the charts developed for Homework 1 interactive with Javascript and d3.js.
+In this assignment you will create a bar chart, a node-link diagram and a map that are linked to each other and visualize data from PAC 12 teams and games.
 
 ## Implementation
 
