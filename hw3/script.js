@@ -43,26 +43,35 @@ function updateBarChart() {
 
     // ******* TODO: PART I *******
     var textWidth = 80;
-    var width = 427 - textWidth;
+    var padding = 20;
+    var width = 427 - textWidth ;
     var height = 500 - textWidth;
-    var max = 100000;
+    var max = 90000;
     // Create the x and y scales; make
     // sure to leave room for the axes
     var xScale = d3.scale.ordinal()
         .domain(d3.range(selectedSeries.length))
         .rangeRoundBands([0, width], 0.05);
 
+
     var yScale = d3.scale.linear()
         .domain([0, max])
-        .range([height, 0])
+        .range([height , 0])
         .nice();
 
     var xAxis = d3.svg.axis();
     xAxis.scale(xScale);
-    xAxis.orient("bottom");
+    xAxis.orient("bottom")
+        .tickFormat('');
     var svgxAxis = d3.select("#xAxis")
-        .attr("transform", "translate(" + textWidth + "," + height + ")")
+        .attr("transform", "translate(" + textWidth + "," + height  + ")")
         .call(xAxis);
+
+    colorScale = d3.scale.linear()
+        .domain([0, max])
+        .range(colorbrewer.Greens[9]);
+
+
 
     var yAxis = d3.svg.axis();
     yAxis.scale(yScale);
@@ -81,6 +90,26 @@ function updateBarChart() {
     var barGroupsEnter = d3.select("#bars");
     barGroupsEnter.attr("transform", "translate(" + textWidth + "," + 0 + ")");
     var rectangle = barGroupsEnter.selectAll("rect").data(selectedSeries);
+
+    rectangle.enter()
+        .append("text").text(function (d) {
+            console.log("datetime", d.Date);
+        return d.Date;
+        })
+        .attr("x", function(d,i){
+            return xScale(i) + (xScale.rangeBand())/2 ;
+        })
+        // dy is a shift along the y axis
+        .attr("dy", height + 5)
+        // align it to the right
+        .attr("text-anchor", "end")
+        // center it
+        .attr("alignment-baseline", "middle")
+        .attr("transform", function(d ,i){
+            return "rotate(-90," + (xScale(i) + xScale.rangeBand()/2) + ",425)" ;
+        })
+
+    //Bar chart of rectangle
     rectangle.enter()
         .append("rect")
         .attr("x", function(d , i){
@@ -88,15 +117,18 @@ function updateBarChart() {
             return xScale(i);
         })
         .attr("y", function(d , i){
+            console.log(d.attendance);
             return  yScale(d.attendance);
         })
         .attr("width", xScale.rangeBand)
         .attr("height", function(d , i){
-            console.log("attendance =",d.attendance );
-            console.log("scale attendance =",yScale(d.attendance) );
             return  height - yScale(d.attendance);
         })
-        .attr("fill","blue")
+        .attr("fill",function (d) {
+            console.log("colorScale:",colorScale(d.attendance));
+            return colorScale(d.attendance);
+        });
+
     // Make the bars respond to hover and click events
 }
 
@@ -304,7 +336,7 @@ d3.json("data/pac12_2013.json", function (error, loadedData) {
     deriveTeamSchedules();
     
     // Start off with Utah's games selected
-    selectedSeries = teamSchedules.Utah;
+    selectedSeries = teamSchedules["Colorado"];
 
     // Draw everything for the first time
     updateBarChart();
