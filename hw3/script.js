@@ -223,14 +223,48 @@ function updateForceDirectedGraph() {
     var svg = d3.select("#graph");
 
     var link = svg.selectAll(".links")
-        .data(data.edges)
-        .enter().append("line")
+        .data(data.edges);
+
+    link.enter()
+        .append("line")
         .attr("class", "link");
+
+    link.attr("class", "link");
 
 
     var node = svg.selectAll(".nodes")
-        .data(data.vertices)
-        .enter().append("path").attr("class", "node");
+        .data(data.vertices);
+
+    node.enter()
+        .append("path")
+        .attr("class", "node")
+        .attr("d" , d3.svg.symbol().type(function(d){
+        console.log("data_type == ", d.data_type);
+        if(d.data_type == "Game")
+        {
+            return d3.svg.symbolTypes[0];
+        }
+        else
+        {
+            return d3.svg.symbolTypes[5];
+        }}).size(function(d,i){
+        if(d.data_type == "Game")
+        {
+            for( var j = 0; j < selectedSeries.length; j++) {
+                if ((selectedSeries[j]._id == d._id)) {
+                    return 200;
+                }
+            }
+            return 50;
+        }
+        else
+        {
+            return 50;
+        }}))
+        .style("fill", function (d) {
+            // color according to the group
+            return colorScale(d["attendance"]);
+        }).call(force.drag);
 
 
 
@@ -244,11 +278,25 @@ function updateForceDirectedGraph() {
         else
         {
             return d3.svg.symbolTypes[5];
+        }}).size(function(d,i){
+        if(d.data_type == "Game")
+        {
+            for( var j = 0; j < selectedSeries.length; j++) {
+                if ((selectedSeries[j]._id == d._id)) {
+                    return 200;
+                }
+            }
+            return 50;
+        }
+        else
+        {
+            return 50;
         }}))
         .style("fill", function (d) {
             // color according to the group
             return colorScale(d["attendance"]);
         }).call(force.drag);
+
 
     force.on("tick", function () {
         link.attr("x1", function (d) {
@@ -268,7 +316,6 @@ function updateForceDirectedGraph() {
             return "translate(" + d.x + ", " + d.y + ")";
         });
     });
-
 
     // Update the links based on the current selection
 
@@ -521,9 +568,13 @@ d3.json("data/pac12_2013.json", function (error, loadedData) {
 
     // Draw everything for the first time
     updateBarChart();
-    alert("60");
+    updateForceDirectedGraph();
+    updateMap();
+
+
+   /* alert("60");
     selectedSeries = teamSchedules["Utah"];
     updateBarChart();
     updateForceDirectedGraph();
-    updateMap();
+    updateMap();*/
 });
