@@ -14,7 +14,7 @@ function setHover(d) {
     // There are FOUR data_types that can be hovered;
     // nothing (null), a single Game, a Team, or
     // a Location
-    
+
     // ******* TODO: PART V *******
 }
 
@@ -28,7 +28,7 @@ function changeSelection(d) {
     // a Team, or a Location.
 
     // ******* TODO: PART V *******
-    
+
     // Update everything that is data-dependent
     // Note that updateBarChart() needs to come first
     // so that the color scale is set
@@ -37,22 +37,25 @@ function changeSelection(d) {
 /* DRAWING FUNCTIONS */
 
 function updateBarChart() {
+
     var svgBounds = document.getElementById("barChart").getBoundingClientRect(),
         xAxisSize = 100,
         yAxisSize = 60;
-
+    var margin = {top: 40, right: 30, bottom: 40, left: 40};
+    var width = svgBounds.width - margin.left - margin.right;
+    var height = svgBounds.height - margin.top - margin.bottom;
+    var max =90000;
+    var textWidth = 60;
     // ******* TODO: PART I *******
-    var textWidth = 80;
-    var padding = 20;
-    var width = 427 - textWidth ;
-    var height = 500 - textWidth;
-    var max = 90000;
+
     // Create the x and y scales; make
     // sure to leave room for the axes
     var xScale = d3.scale.ordinal()
-        .domain(d3.range(selectedSeries.length))
         .rangeRoundBands([0, width], 0.05);
 
+    xScale.domain(selectedSeries.map(function (d) {
+        return d["Date"];
+    }));
 
     var yScale = d3.scale.linear()
         .domain([0, max])
@@ -61,14 +64,22 @@ function updateBarChart() {
 
     var xAxis = d3.svg.axis();
     xAxis.scale(xScale);
-    xAxis.orient("bottom")
-        .tickFormat('');
+    xAxis.orient("bottom").tickFormat('');
+
+
     var svgxAxis = d3.select("#xAxis")
-        .attr("transform", "translate(" + textWidth + "," + height  + ")")
+        .attr("transform", "translate(" + textWidth + "," + (10 + height)  + ")")
         .call(xAxis);
+       /* .selectAll("text")
+        .style("text-anchor", "end")
+        .attr("dx", "-0.80em")
+        .attr("dy", "0,02em")
+        .attr("transform", "rotate(-90)");*/
+
+    var min = d3.min(selectedSeries, function(d) { return d.attendance;});
 
     colorScale = d3.scale.linear()
-        .domain([0, max])
+        .domain([min, max])
         .range(colorbrewer.Greens[9]);
 
 
@@ -77,8 +88,9 @@ function updateBarChart() {
     yAxis.scale(yScale);
     yAxis.orient("left");
     var svgyAxis = d3.select("#yAxis")
-        .attr("transform", "translate(" + textWidth + "," + 0 + ")")
+        .attr("transform", "translate(" + textWidth + "," + 10 + ")")
         .call(yAxis);
+
 
 
     // Create colorScale (note that colorScale
@@ -88,16 +100,18 @@ function updateBarChart() {
 
     // Create the bars (hint: use #bars)
     var barGroupsEnter = d3.select("#bars");
-    barGroupsEnter.attr("transform", "translate(" + textWidth + "," + 0 + ")");
-    var rectangle = barGroupsEnter.selectAll("rect").data(selectedSeries);
+    barGroupsEnter.attr("transform", "translate(" + textWidth + "," + 10 + ")");
 
-    rectangle.enter()
+    var rectangle = barGroupsEnter.selectAll("rect").data(selectedSeries);
+    var scales =  barGroupsEnter.selectAll("text").data(selectedSeries);
+    scales
+        .enter()
         .append("text").text(function (d) {
             console.log("datetime", d.Date);
-        return d.Date;
+            return d.Date;
         })
         .attr("x", function(d,i){
-            return xScale(i) + (xScale.rangeBand())/2 ;
+            return xScale(d.Date) + (xScale.rangeBand())/2 ;
         })
         // dy is a shift along the y axis
         .attr("dy", height + 5)
@@ -106,54 +120,170 @@ function updateBarChart() {
         // center it
         .attr("alignment-baseline", "middle")
         .attr("transform", function(d ,i){
-            return "rotate(-90," + (xScale(i) + xScale.rangeBand()/2) + ",425)" ;
-        })
+            return "rotate(-90," + (xScale(d.Date) + xScale.rangeBand()/2) + ",425)" ;
+        });
 
-    //Bar chart of rectangle
-    rectangle.enter()
+    scales
+        .text(function (d) {
+            console.log("datetime", d.Date);
+            return d.Date;
+        })
+        .attr("x", function(d,i){
+            return xScale(d.Date) + (xScale.rangeBand())/2 ;
+        })
+        // dy is a shift along the y axis
+        .attr("dy", height + 5)
+        // align it to the right
+        .attr("text-anchor", "end")
+        // center it
+        .attr("alignment-baseline", "middle")
+        .attr("transform", function(d ,i){
+            return "rotate(-90," + (xScale(d.Date) + xScale.rangeBand()/2) + ",425)" ;
+        });
+
+    scales
+        .exit()
+        .remove();
+    // //Bar chart of rectangle
+
+    rectangle
+        .enter()
         .append("rect")
         .attr("x", function(d , i){
-            console.log(xScale(i));
-            return xScale(i);
+            // console.log(xScale(i));
+            return xScale(d.Date);
         })
         .attr("y", function(d , i){
-            console.log(d.attendance);
+            // console.log(d.attendance);
             return  yScale(d.attendance);
         })
         .attr("width", xScale.rangeBand)
         .attr("height", function(d , i){
             return  height - yScale(d.attendance);
         })
-        .attr("fill",function (d) {
-            console.log("colorScale:",colorScale(d.attendance));
-            return colorScale(d.attendance);
+        .attr("fill", function(d , i){
+            return  colorScale(d.attendance);
         });
 
+    rectangle
+        .attr("x", function(d , i){
+            // console.log(xScale(i));
+            return xScale(d.Date);
+        })
+        .attr("y", function(d , i){
+            // console.log(d.attendance);
+            return  yScale(d.attendance);
+        })
+        .attr("width", xScale.rangeBand)
+        .attr("height", function(d , i){
+            return  height - yScale(d.attendance);
+        })
+        .attr("fill", function(d , i){
+            return  colorScale(d.attendance);
+        });
+    rectangle
+        .exit()
+        .remove();
     // Make the bars respond to hover and click events
 }
 
 function updateForceDirectedGraph() {
     // ******* TODO: PART II *******
-    
-    // Set up the force-directed
-    // layout engine
 
-    // Draw the links (hint: use #links)
+    var width = 427;
+    var height = 500;
+    var color = d3.scale.ordinal()
+        .domain([0,1])
+        .range(colorbrewer.RdBu[9]);
+
+    var force = d3.layout.force()
+        // the strength of repulsion/attraction
+        // the lower the value, the more repulsion
+        // positive values attract each other
+        .charge(-120)
+        // the target distance between nodes
+        .linkDistance(30)
+        // how "sticky" things are - 1, no friction, 0 max friction
+        .friction(0.9)
+        // how strongly the nodes are pulled toward a gravity well (e.g., the center of the svg)
+        .gravity(0.1)
+        // tells the layout about the available space
+        .size([width, height]);
+
+    force
+        // providing the layout with the nodes
+        .nodes(data.vertices)
+        // providing the layouts with the links
+        .links(data.edges)
+        // first computation
+        .start();
+
+    console.log(force.links());
+
+    var svg = d3.select("#graph");
+
+    var link = svg.selectAll(".links")
+        .data(data.edges)
+        .enter().append("line")
+        .attr("class", "link");
+
+
+    var node = svg.selectAll(".nodes")
+        .data(data.vertices)
+        .enter().append("path").attr("class", "node");
+
+
+
+
+    node.attr("d" , d3.svg.symbol().type(function(d){
+        console.log("data_type == ", d.data_type);
+        if(d.data_type == "Game")
+        {
+            return d3.svg.symbolTypes[0];
+        }
+        else
+        {
+            return d3.svg.symbolTypes[5];
+        }}))
+        .style("fill", function (d) {
+            // color according to the group
+            return colorScale(d["attendance"]);
+        }).call(force.drag);
+
+    force.on("tick", function () {
+        link.attr("x1", function (d) {
+            return d.source.x;
+        })
+            .attr("y1", function (d) {
+                return d.source.y;
+            })
+            .attr("x2", function (d) {
+                return d.target.x;
+            })
+            .attr("y2", function (d) {
+                return d.target.y;
+            });
+
+        node.attr("transform", function (d) {
+            return "translate(" + d.x + ", " + d.y + ")";
+        });
+    });
+
 
     // Update the links based on the current selection
 
     // Draw the nodes (hint: use #nodes), and make them respond to dragging
-    
+
     // ******* TODO: PART IV *******
-    
+
     // Make the nodes respond to hover and click events
-    
+
     // ******* TODO: PART V *******
-    
+
     // Color and size the Game nodes if they are in selectedSeries
-    
+
     // ******* TODO: PART II *******
-    
+
     // Finally, tell the layout engine how
     // to manipulate the nodes and links
     // that we've drawn
@@ -161,15 +291,48 @@ function updateForceDirectedGraph() {
 
 function updateMap() {
     // ******* TODO: PART III *******
-    
+
+    var height = 900;
+    var width  = 500;
+    var svg = d3.select("#map");
+    var latlong = d3.values(locationData);
+
+    //Define map projection
+    projection = d3.geo.albersUsa()
+        .translate([height / 2 , width / 2])
+        .scale([700]);
+
+
+    var gamePoints = svg.selectAll("points")
+        .data(latlong)
+        .enter().append("circle")
+        .attr("transform", function(d) {
+            return "translate(" + projection([d.longitude, d.latitude]) + ")"
+        })
+        .attr("r", function(d,i){
+            for( var j = 0; j < selectedSeries.length; j++)
+            {
+                console.log("inside loop");
+                if((selectedSeries[j].latitude == d.latitude) && (selectedSeries[j].longitude == d.longitude))
+                {
+                    return 7;
+                }
+            }
+            return 5;
+        })
+        .style("fill", "steelblue")
+        .style("opacity", 0.8);
+
+    // Code referenced from stack Overflow   http://stackoverflow.com/questions/20987535/plotting-points-on-a-map-with-d3
+
     // Draw the games on the map (hint: use #points)
-    
+
     // NOTE: locationData is *NOT* a Javascript Array, like
     // we'd normally use for .data() ... instead, it's just an
     // object (often called an Associative Array)!
-    
+
     // ******* TODO: PART V *******
-    
+
     // Update the circle appearance (set the fill to the
     // mean attendance of all selected games... if there
     // are no matching games, revert to the circle's default style)
@@ -177,8 +340,26 @@ function updateMap() {
 
 function drawStates(usStateData) {
     // ******* TODO: PART III *******
-    
-    // Draw the background (state outlines; hint: use #states)
+
+    var height = 900;
+    var width  = 500;
+    var svg = d3.select("#map");
+
+
+    //Define map projection
+    projection = d3.geo.albersUsa()
+        .translate([height / 2 , width/ 2])
+        .scale([700]);
+    console.log("---p----",projection(["40.760036", "-111.84889"]));
+    //Define default path generator
+    var path = d3.geo.path().projection(projection);
+    svg.selectAll("#states")
+        .datum(topojson.feature(usStateData,usStateData.objects.states))
+        .attr("d", path);
+
+
+
+
 }
 
 
@@ -197,7 +378,7 @@ function isObjectInArray(obj, array) {
     // With Javascript primitives (strings, numbers), you
     // can test its presence in an array with
     // array.indexOf(obj) !== -1
-    
+
     // However, with actual objects, we need this
     // helper function:
     var i;
@@ -257,10 +438,10 @@ function deriveLocationData() {
             // a data_type property, similar to the ones in the
             // original dataset that you can use to identify
             // what type of selection the current selection is,
-            
+
             // and a list of all the original game objects that
             // happened at this location
-            
+
             if (!locationData.hasOwnProperty(key)) {
                 locationData[key] = {
                     "latitude": d.latitude,
@@ -320,7 +501,7 @@ function deriveTeamSchedules() {
 
 d3.json("data/us.json", function (error, usStateData) {
     if (error) throw error;
-    
+
     drawStates(usStateData);
 });
 d3.json("data/pac12_2013.json", function (error, loadedData) {
@@ -334,11 +515,14 @@ d3.json("data/pac12_2013.json", function (error, loadedData) {
     deriveGraphData();
     deriveLocationData();
     deriveTeamSchedules();
-    
+
     // Start off with Utah's games selected
-    selectedSeries = teamSchedules["Colorado"];
+    selectedSeries = teamSchedules["Washington State"];
 
     // Draw everything for the first time
+    updateBarChart();
+    alert("60");
+    selectedSeries = teamSchedules["Utah"];
     updateBarChart();
     updateForceDirectedGraph();
     updateMap();
