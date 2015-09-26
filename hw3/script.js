@@ -64,8 +64,7 @@ function changeSelection(d) {
     // ******* TODO: PART V *******
    if(d.data_type == "Game")
 	{
-		selectedSeries.length = 0;
-		selectedSeries.push(d);
+		selectedSeries = [d];
 		updateBarChart();
 		updateForceDirectedGraph();
 		updateMap();
