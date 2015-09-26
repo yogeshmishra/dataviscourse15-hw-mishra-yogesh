@@ -1,6 +1,6 @@
 /*globals d3, topojson, document*/
 // These are helpers for those using JSHint
-
+//Discussed with Sunny Hardasani and Murali Teja
 var data,
     locationData,
     teamSchedules,
@@ -14,8 +14,42 @@ function setHover(d) {
     // There are FOUR data_types that can be hovered;
     // nothing (null), a single Game, a Team, or
     // a Location
-
-    // ******* TODO: PART V *******
+   var displayitem = "";
+   if(d == null) 
+	{
+		displayitem = "";
+	}
+	else{ 
+	
+	if(d.data_type == "Game")
+	{
+		displayitem = d["Visit Team Name"] + "@" + d["Home Team Name"];
+	}
+	else if(d.data_type == "Team")
+	{
+		displayitem = d["name"];
+	}
+	else if (d.data_type == "Location") 
+	{
+		var games = d["games"];
+		console.log("games length", games.length);
+		if(games.length > 0)
+		{
+			displayitem = displayitem + games[0]["Visit Team Name"] + "@" + games[0]["Home Team Name"];
+		
+			for(var j = 1; j < games.length; j++)
+			{	    	
+				displayitem =  displayitem + ", ";    		
+    			displayitem = displayitem + games[j]["Visit Team Name"] + "@" + games[j]["Home Team Name"];
+    		}
+    	}
+    	else {
+    	displayitem = "";
+		}
+	}
+	   // ******* TODO: PART V *******
+	}
+	document.getElementById("info").innerHTML = displayitem;
 }
 
 function clearHover() {
@@ -26,18 +60,43 @@ function changeSelection(d) {
     // There are FOUR data_types that can be selected;
     // an empty selection (null), a single Game,
     // a Team, or a Location.
-
+	
     // ******* TODO: PART V *******
-
+   if(d.data_type == "Game")
+	{
+		selectedSeries.length = 0;
+		selectedSeries.push(d);
+		updateBarChart();
+		updateForceDirectedGraph();
+		updateMap();
+	}
+	else if(d.data_type == "Team")
+	{
+		selectedSeries = teamSchedules[d.name];
+		updateBarChart();
+		updateForceDirectedGraph();
+		updateMap();
+		
+	}
+	else if (d.data_type == "Location") 
+	{
     // Update everything that is data-dependent
     // Note that updateBarChart() needs to come first
     // so that the color scale is set
+    	selectedSeries = d["games"];
+		updateBarChart();
+		updateForceDirectedGraph();
+		updateMap();
+	}
+	else if (d.data_type == null) 
+	{
+	}
 }
-
 /* DRAWING FUNCTIONS */
 
 function updateBarChart() {
-
+	 //Code inspired from the lecture site	 
+	 //http://dataviscourse.net/2015/lectures/lecture-advanced-d3/
     var svgBounds = document.getElementById("barChart").getBoundingClientRect(),
         xAxisSize = 100,
         yAxisSize = 60;
@@ -70,18 +129,14 @@ function updateBarChart() {
     var svgxAxis = d3.select("#xAxis")
         .attr("transform", "translate(" + textWidth + "," + (10 + height)  + ")")
         .call(xAxis);
-       /* .selectAll("text")
-        .style("text-anchor", "end")
-        .attr("dx", "-0.80em")
-        .attr("dy", "0,02em")
-        .attr("transform", "rotate(-90)");*/
+
 
     var min = d3.min(selectedSeries, function(d) { return d.attendance;});
 
-    colorScale = d3.scale.linear()
-        .domain([min, max])
+ 
+	    colorScale = d3.scale.linear()
+        .domain([10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000])
         .range(colorbrewer.Greens[9]);
-
 
 
     var yAxis = d3.svg.axis();
@@ -162,8 +217,12 @@ function updateBarChart() {
             return  height - yScale(d.attendance);
         })
         .attr("fill", function(d , i){
+        		
             return  colorScale(d.attendance);
-        });
+        })
+        .on('click', function(d,i){  changeSelection(d);  })
+  		  .on('mouseover', function(d,i){  setHover(d);  })
+        .on('mouseout', function(d,i){  clearHover();  });
 
     rectangle
         .attr("x", function(d , i){
@@ -180,7 +239,12 @@ function updateBarChart() {
         })
         .attr("fill", function(d , i){
             return  colorScale(d.attendance);
-        });
+        })
+        .on('click', function(d,i){  changeSelection(d);  })
+  		  .on('mouseover', function(d,i){  setHover(d);  })
+        .on('mouseout', function(d,i){  clearHover();  });
+        
+        
     rectangle
         .exit()
         .remove();
@@ -189,12 +253,12 @@ function updateBarChart() {
 
 function updateForceDirectedGraph() {
     // ******* TODO: PART II *******
-
+    //Code inspired from the lecture site
+	// http://dataviscourse.net/2015/lectures/lecture-d3-layouts-maps/
     var width = 427;
     var height = 500;
-    var color = d3.scale.ordinal()
-        .domain([0,1])
-        .range(colorbrewer.RdBu[9]);
+   var normalshapeSize = 50;
+	var selectedShapeSize = 200;
 
     var force = d3.layout.force()
         // the strength of repulsion/attraction
@@ -222,20 +286,22 @@ function updateForceDirectedGraph() {
 
     var svg = d3.select("#graph");
 
-    var link = svg.selectAll(".links")
-        .data(data.edges);
-
-    link.enter()
+    var link = d3.select("#links");
+    
+	 var lines = link.selectAll("line").data(data.edges);
+	 
+    lines.enter()
         .append("line")
         .attr("class", "link");
 
-    link.attr("class", "link");
+    lines.attr("class", "link");
 
 
-    var node = svg.selectAll(".nodes")
-        .data(data.vertices);
+    var node = d3.select("#nodes");
+    
+	 var vertices =  node.selectAll("path").data(data.vertices);
 
-    node.enter()
+    vertices.enter()
         .append("path")
         .attr("class", "node")
         .attr("d" , d3.svg.symbol().type(function(d){
@@ -252,24 +318,33 @@ function updateForceDirectedGraph() {
         {
             for( var j = 0; j < selectedSeries.length; j++) {
                 if ((selectedSeries[j]._id == d._id)) {
-                    return 200;
+                    return selectedShapeSize;
                 }
             }
-            return 50;
+            return normalshapeSize;
         }
         else
         {
-            return 50;
+            return normalshapeSize;
         }}))
         .style("fill", function (d) {
             // color according to the group
-            return colorScale(d["attendance"]);
-        }).call(force.drag);
+            for( var j = 0; j < selectedSeries.length; j++) {
+                if ((selectedSeries[j]._id == d._id)) {
+                    return colorScale(d["attendance"]);
+                }
+            }
+            return "blue";
+        }).call(force.drag)
+        .on('click', function(d,i){  changeSelection(d);  })
+		  .on('mouseover', function(d,i){  setHover(d);  })
+        .on('mouseout', function(d,i){  clearHover();  });
 
 
+// changing size of the shapes :
+//http://stackoverflow.com/questions/23224285/change-the-size-of-a-symbol-with-a-transition-in-d3-js  
 
-
-    node.attr("d" , d3.svg.symbol().type(function(d){
+    vertices.attr("d" , d3.svg.symbol().type(function(d){
         console.log("data_type == ", d.data_type);
         if(d.data_type == "Game")
         {
@@ -283,23 +358,31 @@ function updateForceDirectedGraph() {
         {
             for( var j = 0; j < selectedSeries.length; j++) {
                 if ((selectedSeries[j]._id == d._id)) {
-                    return 200;
+                    return selectedShapeSize;
                 }
             }
-            return 50;
+            return normalshapeSize;
         }
         else
         {
-            return 50;
+            return normalshapeSize;
         }}))
         .style("fill", function (d) {
             // color according to the group
-            return colorScale(d["attendance"]);
-        }).call(force.drag);
+            for( var j = 0; j < selectedSeries.length; j++) {
+                if ((selectedSeries[j]._id == d._id)) {
+                    return colorScale(d["attendance"]);
+                }
+            }
+            return "blue";
+        }).call(force.drag)
+        .on('click', function(d,i){  changeSelection(d);  })
+        .on('mouseover', function(d,i){  setHover(d);  })
+        .on('mouseout', function(d,i){  clearHover();  });
 
 
     force.on("tick", function () {
-        link.attr("x1", function (d) {
+        lines.attr("x1", function (d) {
             return d.source.x;
         })
             .attr("y1", function (d) {
@@ -312,7 +395,7 @@ function updateForceDirectedGraph() {
                 return d.target.y;
             });
 
-        node.attr("transform", function (d) {
+        vertices.attr("transform", function (d) {
             return "translate(" + d.x + ", " + d.y + ")";
         });
     });
@@ -338,7 +421,7 @@ function updateForceDirectedGraph() {
 
 function updateMap() {
     // ******* TODO: PART III *******
-
+	//http://stackoverflow.com/questions/20987535/plotting-points-on-a-map-with-d3
     var height = 900;
     var width  = 500;
     var svg = d3.select("#map");
@@ -348,27 +431,81 @@ function updateMap() {
     projection = d3.geo.albersUsa()
         .translate([height / 2 , width / 2])
         .scale([700]);
-
-
-    var gamePoints = svg.selectAll("points")
-        .data(latlong)
-        .enter().append("circle")
-        .attr("transform", function(d) {
+	
+	var normalshapeSize = 3;
+	var selectedShapeSize = 9;
+	
+	
+	var gamePoints = d3.select("#points");
+	
+	var location = gamePoints.selectAll("circle").data(latlong);
+	
+ 	location.enter()
+ 			.append("circle")
+         .attr("transform", function(d) {
             return "translate(" + projection([d.longitude, d.latitude]) + ")"
-        })
-        .attr("r", function(d,i){
+          })
+          .attr("r", function(d,i){
             for( var j = 0; j < selectedSeries.length; j++)
             {
-                console.log("inside loop");
-                if((selectedSeries[j].latitude == d.latitude) && (selectedSeries[j].longitude == d.longitude))
+               if((selectedSeries[j].latitude == d.latitude) && (selectedSeries[j].longitude == d.longitude))
                 {
-                    return 7;
+                    return selectedShapeSize;
                 }
             }
-            return 5;
-        })
-        .style("fill", "steelblue")
-        .style("opacity", 0.8);
+            return normalshapeSize;
+           })
+        	  .style("fill", function(d, i){
+            for( var j = 0; j < selectedSeries.length; j++)
+            {
+                if((selectedSeries[j].latitude == d.latitude) && (selectedSeries[j].longitude == d.longitude)) {
+                    var avergaeAttendance = 0;
+                    var games = d["games"];
+                    for (var j = 0; j < games.length; j++) {
+                        avergaeAttendance = avergaeAttendance + games[j].attendance;
+                    }
+                    avergaeAttendance = (avergaeAttendance / games.length);
+                    return colorScale(avergaeAttendance);
+                }
+           	}
+            return "blue";})
+           .style("opacity", 0.8)
+           .on('click', function(d,i){  changeSelection(d);  })
+           .on('mouseover', function(d,i){  setHover(d);  })
+           .on('mouseout', function(d,i){  clearHover();  });
+           
+     	location.attr("transform", function(d) {
+            	return "translate(" + projection([d.longitude, d.latitude]) + ")"
+            })
+           .attr("r", function(d,i){
+            for( var j = 0; j < selectedSeries.length; j++)
+            {
+                
+                if((selectedSeries[j].latitude == d.latitude) && (selectedSeries[j].longitude == d.longitude))
+                {
+                    return selectedShapeSize;
+                }
+            }
+            return normalshapeSize;
+           })
+            .style("fill", function(d, i){
+                for( var j = 0; j < selectedSeries.length; j++)
+                {
+                    if((selectedSeries[j].latitude == d.latitude) && (selectedSeries[j].longitude == d.longitude)) {
+                        var avergaeAttendance = 0;
+                        var games = d["games"];
+                        for (var j = 0; j < games.length; j++) {
+                            avergaeAttendance = avergaeAttendance + games[j].attendance;
+                        }
+                        avergaeAttendance = (avergaeAttendance / games.length);
+                        return colorScale(avergaeAttendance);
+                    }
+                }
+                return "blue";})
+           .style("opacity", 0.8)
+           .on('click', function(d,i){  changeSelection(d);  })
+           .on('mouseover', function(d,i){  setHover(d);  })
+           .on('mouseout', function(d,i){  clearHover();  });
 
     // Code referenced from stack Overflow   http://stackoverflow.com/questions/20987535/plotting-points-on-a-map-with-d3
 
@@ -382,12 +519,12 @@ function updateMap() {
 
     // Update the circle appearance (set the fill to the
     // mean attendance of all selected games... if there
-    // are no matching games, revert to the circle's default style)
 }
+    // are no matching games, revert to the circle's default style)
 
 function drawStates(usStateData) {
     // ******* TODO: PART III *******
-
+	//http://giscollective.org/d3-basemap-with-top/
     var height = 900;
     var width  = 500;
     var svg = d3.select("#map");
@@ -397,13 +534,12 @@ function drawStates(usStateData) {
     projection = d3.geo.albersUsa()
         .translate([height / 2 , width/ 2])
         .scale([700]);
-    console.log("---p----",projection(["40.760036", "-111.84889"]));
+   
     //Define default path generator
     var path = d3.geo.path().projection(projection);
     svg.selectAll("#states")
         .datum(topojson.feature(usStateData,usStateData.objects.states))
-        .attr("d", path);
-
+        .attr("d", path)
 
 
 
@@ -564,7 +700,7 @@ d3.json("data/pac12_2013.json", function (error, loadedData) {
     deriveTeamSchedules();
 
     // Start off with Utah's games selected
-    selectedSeries = teamSchedules["Washington State"];
+    selectedSeries = teamSchedules["Washington"];
 
     // Draw everything for the first time
     updateBarChart();
@@ -572,9 +708,4 @@ d3.json("data/pac12_2013.json", function (error, loadedData) {
     updateMap();
 
 
-   /* alert("60");
-    selectedSeries = teamSchedules["Utah"];
-    updateBarChart();
-    updateForceDirectedGraph();
-    updateMap();*/
 });
