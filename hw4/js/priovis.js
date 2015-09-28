@@ -186,7 +186,7 @@ PrioVis.prototype.onSelectionChange = function (selectionStart, selectionEnd) {
 
 
 /**
- * The aggregate function that creates the counts for each age for a given filter.
+ * The aggregate function that creates the counts for each priority for a given filter.
  * @param _filter - A filter can be, e.g.,  a function that is only true for data of a given time range
  * @returns {Array|*}
  */
@@ -203,7 +203,7 @@ PrioVis.prototype.filterAndAggregate = function (_filter) {
     // ******* TASK 1b *******
     // Implement the function that filters the data and sums the values
     
-    // create an array of values for age 0-99
+    // create an array of values for the priorities
     
     // accumulate all values that fulfill the filter criterion
 
