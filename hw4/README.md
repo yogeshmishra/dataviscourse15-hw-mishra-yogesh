@@ -279,11 +279,11 @@ In this homework, an event should be generated whenever the brush selection chan
 You can try out what to do in the following tasks in the file [3_tasks.html](3_tasks.html), an other test-case, before you move this to the appropriate places in the visualization code. Note that this is optional.
 
 ### Task 3a: Prepare CountVis 
-Create an event handler in ***index.html*** and trigger an event called `selectionChanged` during brushing (remember which function is called during a brush) in ***js/countvis.js***.
+Create an event handler in ***js/main.js*** and trigger an event called `selectionChanged` during brushing (remember which function is called during a brush) in ***js/countvis.js***.
 
 ### Task 3b: Hook the Age Distribution up to events.
 
-Use the event handler and the aggregation function to integrate this visualization so that it adapts to changes in the brush selection. Bind the `onSelectionChange(startDate, endDate)` method to listen to the '*selectionChanged*' from the event handler in ***index.html***. 
+Use the event handler and the aggregation function to integrate this visualization so that it adapts to changes in the brush selection. Bind the `onSelectionChange(startDate, endDate)` method to listen to the '*selectionChanged*' from the event handler in ***js/main.js***. 
 
 ### Task 3c: Hook the Visualization for Priorities Distribution (PrioVis) up to events.
 
