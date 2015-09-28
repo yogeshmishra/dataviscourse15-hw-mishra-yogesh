@@ -203,7 +203,7 @@ PrioVis.prototype.filterAndAggregate = function (_filter) {
     // ******* TASK 1b *******
     // Implement the function that filters the data and sums the values
     
-    // create an array of values for the priorities
+    // create an array of values for the priorities 0-15
     
     // accumulate all values that fulfill the filter criterion
 

@@ -149,7 +149,7 @@ Once you have completed task 1a and 1b, your [1_tasks.html](1_tasks.html) file s
 
 ![](img/t1_solved.png)
 
-Once your test cases work, add the code to the appropriate places in the visualization system and all the views should appear!
+Once your test cases work, add the code to the appropriate places in the visualization system. Load the data in the starting part of main.js and put the aggregation logic in priovis.js and aggregate on priority count values for the selected time range. After this, all the views should appear!
 
 ## Part II: Making an Area Chart Interactive with Brushing & Zooming
 
