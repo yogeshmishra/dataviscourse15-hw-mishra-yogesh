@@ -59,7 +59,7 @@ PrioVis.prototype.initVis = function () {
     self.graphW = 500;
     self.graphH = 300;
 
-    self.xScale = d3.scale.ordinal().rangeBands([0, self.graphW], 0.1).domain(d3.range(0, 15));
+    self.xScale = d3.scale.ordinal().rangeBands([0, self.graphW], 0.1).domain(d3.range(0, 16));
     // xScale and xAxis stays constant
 
     self.yScale = d3.scale.linear().range([self.graphH, 0]);

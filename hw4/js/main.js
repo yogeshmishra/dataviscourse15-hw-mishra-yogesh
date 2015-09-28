@@ -63,7 +63,7 @@
                     count: +d["count(*)"]
                 };
                 
-                res.prios = d3.range(0, 15).map(function (counter) {
+                res.prios = d3.range(0, 16).map(function (counter) {
                         return d["sum(p" + counter + ")"];
                     });
                 res.ages = d3.range(0, 99).map(function () {
