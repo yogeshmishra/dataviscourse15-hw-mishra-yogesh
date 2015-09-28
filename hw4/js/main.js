@@ -60,7 +60,7 @@
             allData = perDayData.map(function (d) {
                 var res = {
                     time: dateFormatter.parse(d.day),
-                    count: +d["count(*)"] + 1
+                    count: +d["count(*)"]
                 };
                 
                 res.prios = d3.range(0, 15).map(function (counter) {
