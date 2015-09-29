@@ -100,8 +100,7 @@ Some contextual information:
 - The daily sums of votes for different education levels of participants are stored in the array `"education"`. Each object in this array represents one education level (field `"education"`) and it's respective count (field `"count(*)"`)
 - Equivalent to education levels, counts for each year of age are stored in the array `"age"`.
 
-Make sure to unpack the file `data/perDayData.json.zip` as `data/perDayData.json`. You don't need to add and commit the unzipped file to your repository; this will keep the size of your repository smaller.
-
+Make sure to unpack the file `data/perDayData.json.zip` as `data/perDayData.json`.
 
 A second file (**MyWorld_fields.json**) contains meta-information about our data. For now, we are interested in the `"priorities"` object that gives us information for each priority. Again, the priorities are numbered from 0 (priority 1) to 15 (priority 16). You can easily access information for priority 6 via `priority["5"]`. 
 
