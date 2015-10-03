@@ -2,7 +2,7 @@
 *Due: Friday, October 23, 11:59 pm. Value: 6%*
 
 
-This homework consists of your final project proposal. You can find details about the project proposal on the [course website website](http://dataviscourse.net/2015/project/). Your proposal consists of two parts:
+This homework consists of your final project proposal. You can find details about the project proposal on the [course website](http://dataviscourse.net/2015/project/). Your proposal consists of two parts:
 
 1. The project data form that can be [filled out here](https://docs.google.com/forms/d/10_uzWOpvTLqs4759WBeZagp-Ig7J6fLKYtDM8Y2Juvw/viewform).
 2. The proposal document, [see guidelines](http://dataviscourse.net/2015/project/#proposal).
