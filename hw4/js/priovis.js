@@ -136,6 +136,7 @@ PrioVis.prototype.updateVis = function () {
     // draw the bars :
     var bars = self.visG.selectAll(".bar").data(self.displayData);
     bars.exit().remove();
+
     bars.enter().append("rect")
         .attr({
             "class": "bar",
@@ -181,6 +182,7 @@ PrioVis.prototype.updateVis = function () {
             return self.yScale(d);
         }
     });
+
 };
 
 
