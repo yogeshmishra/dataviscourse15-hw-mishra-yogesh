@@ -43,7 +43,9 @@ function PrioVis (_parentElement, _data, _metaData) {
     self.data = _data;
     self.metaData = _metaData;
     self.displayData = [];
-
+    self.displayData1 = [];
+    self.brushWidth = 33;       //Initial width of the brush
+    self.sumOfPriorTies = [];
     self.initVis();
 }
 
@@ -93,7 +95,7 @@ PrioVis.prototype.initVis = function () {
     self.visG.append("g").attr("class", "yAxis axis");
 
     // filter, aggregate, modify data
-    self.wrangleData(null);
+    self.wrangleData(null, null);
 
     // call the update method
     self.updateVis();
@@ -104,11 +106,12 @@ PrioVis.prototype.initVis = function () {
  * Method to wrangle the data. In this case it takes an options object
  * @param _filterFunction - a function that filters data or "null" if none
  */
-PrioVis.prototype.wrangleData = function (_filterFunction) {
+PrioVis.prototype.wrangleData = function (_filterFunction, _filterFunction2) {
     var self = this;
     
     // displayData should hold the data which is visualized
     self.displayData = self.filterAndAggregate(_filterFunction);
+    //self.displayData1 = self.filterAndAggregate(_filterFunction2);
 
 };
 
@@ -121,22 +124,22 @@ PrioVis.prototype.updateVis = function () {
 
 
     var self = this;
-
-    // update the scales :
-    var minMaxY = [0, d3.max(self.displayData)];
+     // update the scales :
+    var minMaxY = (d3.max(self.displayData) > d3.max(self.displayData1)) ? [0, d3.max(self.displayData)]
+        : [0, d3.max(self.displayData1)];
+    console.log(minMaxY);
     self.yScale.domain(minMaxY);
     self.yAxis.scale(self.yScale);
 
     // draw the scales :
     self.visG.select(".yAxis").call(self.yAxis);
-    
     // draw the bars :
     var bars = self.visG.selectAll(".bar").data(self.displayData);
     bars.exit().remove();
     bars.enter().append("rect")
         .attr({
             "class": "bar",
-            "width": self.xScale.rangeBand(),
+            "width": (self.xScale.rangeBand()/2),
             "x": function (d, i) {
                 return self.xScale(i);
             }
@@ -154,6 +157,30 @@ PrioVis.prototype.updateVis = function () {
             return self.yScale(d);
         }
     });
+
+    var bars2 = self.visG.selectAll(".bar2").data(self.displayData1);
+    bars2.exit().remove();
+    bars2.enter().append("rect")
+        .attr({
+            "class": "bar2",
+            "width": (self.xScale.rangeBand()/2),
+            "x": function (d, i) {
+                return self.xScale(i) + (self.xScale.rangeBand()/2);
+            }
+        }).style({
+            "fill": function (d, i) {
+                return "Gray";//self.metaData.priorities[i]["item-color"];
+            }
+        });
+    console.log(self.metaData);
+    bars2.attr({
+        "height": function (d) {
+            return self.graphH - self.yScale(d) - 1;
+        },
+        "y": function (d) {
+            return self.yScale(d);
+        }
+    });
 };
 
 
@@ -163,14 +190,14 @@ PrioVis.prototype.updateVis = function () {
  * be defined here.
  * @param selection
  */
-PrioVis.prototype.onSelectionChange = function (selectionStart, selectionEnd) {
+PrioVis.prototype.onSelectionChange = function (selectionStart, selectionEnd){//, selectionStart2, selectionEnd2) {
     var self = this;
-    
+    var diffDays = parseInt((selectionEnd - selectionStart) / (1000 * 60 * 60 * 24));
+    self.brushWidth = diffDays;
     // call wrangleData with a filter function
     self.wrangleData(function (data) {
         return (data.time <= selectionEnd && data.time >= selectionStart);
     });
-
     self.updateVis();
 };
 
@@ -212,8 +239,16 @@ PrioVis.prototype.filterAndAggregate = function (_filter) {
 		for( var i = 0; i < priorties.length; i++)
 				priorties[i] = priorties[i] + d.prios[i];
 	});
-	console.log(priorties);
-	return	priorties; 
+    if(self.data.length === filteredData.length) {
+            self.sumOfPriorTies = priorties;
+    }
+    for (var i = 0; i < self.sumOfPriorTies.length; i++) {
+        self.displayData1[i] = self.sumOfPriorTies[i];
+        self.displayData1[i] = ((self.displayData1[i] * self.brushWidth) / (self.data.length));
+    }
+    console.log("priorties", priorties);
+    console.log("displayData1", self.displayData1);
+    return	priorties;
     // accumulate all values that fulfill the filter criterion
 
 };

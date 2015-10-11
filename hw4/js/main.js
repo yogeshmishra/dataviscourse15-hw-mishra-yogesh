@@ -35,7 +35,7 @@
         // ******* TASK 3b, 3c *******
         // Create a handler that will deal with a custom event named "selectionChanged"
         // (you will need to edit this line)
-        var eventHandler = {};
+        var eventHandler = d3.dispatch("OnBrushMove");
 
         // Instantiate all Vis Objects here
         var countVis = new CountVis(d3.select("#countVis"), allData, metaData, eventHandler);
@@ -49,8 +49,11 @@
         // (you should bind the appropriate functions here)
         // Also make sure to display something reasonable about
         // the brush in #brushInfo
-        
-        
+        eventHandler.on("OnBrushMove", eventHandlerfn);
+        function eventHandlerfn(from , to){
+            ageVis.onSelectionChange(from, to);
+            prioVis.onSelectionChange(from, to);
+        }
     }
 
     // call this function after both files are loaded -- error should be "null" if no error

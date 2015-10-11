@@ -64,7 +64,6 @@ CountVis.prototype.initVis = function () {
 
     self.xScale = d3.time.scale().range([0, self.graphW]);
     self.yScale = d3.scale.pow().range([self.graphH, 0]); // POWER SCALE HERE !!!
-	 console.log(self.yScale(1000));
     self.xAxis = d3.svg.axis().scale(self.xScale);
     self.yAxis = d3.svg.axis().scale(self.yScale).orient("left");
     
@@ -94,18 +93,19 @@ CountVis.prototype.initVis = function () {
     self.xScale.domain(initialmin);	
     var brush = d3.svg.brush()
         .x(self.xScale).on("brush", function(){
-        self.eventHandler.OnBrushMove(brush.extent()[0], brush.extent()[1]);
+            self.eventHandler.OnBrushMove(brush.extent()[0], brush.extent()[1]);//, brush2.extent()[0], brush2.extent()[1]);
         });
     //.extent([d3.time.day.offset(self.data[0].time, 1), d3.time.day.offset(self.data[30].time), 30]);
     
-   
-    
+    console.log(self.data.length);
    self.visG.append("g")
    .attr("class", "brush")
-   .call(brush.extent([d3.time.day.offset(self.data[0].time, 150), d3.time.day.offset(self.data[0].time, 190)]))
+   .call(brush.extent([d3.time.day.offset(self.data[0].time, 150), d3.time.day.offset(self.data[0].time, 183)]))
    .selectAll("rect")
    .attr("height",  self.graphH );
 
+   console.log(d3.time.day.offset(brush.extent()));
+    console.log("brush Length =  ", (brush.extent()[1] - brush.extent()[0]));
     // filter, aggregate, modify data
     self.wrangleData();
 
@@ -114,7 +114,6 @@ CountVis.prototype.initVis = function () {
     var minMaxY = [0, d3.max(self.displayData.map(function (d) {
         return d.count;
     }))];
-    console.log(minMaxY);
     self.yScale.domain(minMaxY);
 
     var minMaxX = d3.extent(self.displayData.map(function (d) {
@@ -122,11 +121,8 @@ CountVis.prototype.initVis = function () {
     }));
     self.xScale.domain(minMaxX);
     
-    console.log(minMaxX);
-    console.log("what r u doing");
     // ******* TASK 2b *******
     self.addSlider(self.svg);
-    console.log("what r u doing");
     // ******* BONUS TASK 2c *******
     // define zoom
 
@@ -208,13 +204,11 @@ CountVis.prototype.addSlider = function (svg) {
         
         // ******* TASK 2b *******
         // the current value of the slider:
-        console.log("Y Axis Slider value: ", sliderValue);
-        self.yScale = d3.scale.pow().exponent(sliderValue).range([self.graphH, 0]); 
+        self.yScale = d3.scale.pow().exponent(sliderValue).range([self.graphH, 0]);
            // define the domain of scales, because they do not change for countvis
     var minMaxY = [0, d3.max(self.data.map(function (d) {
         return d.count;
     }))];
-    console.log("minMaxY", minMaxY);
     self.yScale.domain(minMaxY);
     
         // do something here to deform the y scale
