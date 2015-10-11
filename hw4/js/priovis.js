@@ -200,11 +200,20 @@ PrioVis.prototype.filterAndAggregate = function (_filter) {
         filter = _filter;
     }
     
-    // ******* TASK 1b *******
+
     // Implement the function that filters the data and sums the values
-    
+	 // ******* TASK 1b *******
+	var filteredData = self.data;
+	filteredData = filteredData.filter(filter);
+       
     // create an array of values for the priorities 0-15
-    
+   var priorties = [ 0, 0 ,0 ,0 ,0 ,0 ,0 , 0, 0, 0 ,0 , 0, 0, 0, 0 , 0];
+	filteredData.map(function (d) {
+		for( var i = 0; i < priorties.length; i++)
+				priorties[i] = priorties[i] + d.prios[i];
+	});
+	console.log(priorties);
+	return	priorties; 
     // accumulate all values that fulfill the filter criterion
 
 };

@@ -85,7 +85,10 @@
     function startHere() {
         // ******* TASK 1a *******
         // Load each data file ASYNCHRONOUSLY, and then call dataLoaded() when they are finished.
-        
+        queue()
+			.defer(d3.json, 'data/perDayData.json') 
+			.defer(d3.json, 'data/MYWorld_fields.json')
+			.await(dataLoaded); // function that uses files
         
     }
     

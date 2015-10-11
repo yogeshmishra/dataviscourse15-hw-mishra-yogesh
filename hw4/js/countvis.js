@@ -64,15 +64,18 @@ CountVis.prototype.initVis = function () {
 
     self.xScale = d3.time.scale().range([0, self.graphW]);
     self.yScale = d3.scale.pow().range([self.graphH, 0]); // POWER SCALE HERE !!!
-
+	 console.log(self.yScale(1000));
     self.xAxis = d3.svg.axis().scale(self.xScale);
     self.yAxis = d3.svg.axis().scale(self.yScale).orient("left");
     
     // ******* TASK 2a *******
     
-    // define a clipping region for the graph
     
-    // create the brush, and
+   
+   
+    
+    
+    
     // ******* TASK 3a *******
     // fire the "selectionChanged" event on self.eventHandler with the needed arguments
 
@@ -84,8 +87,22 @@ CountVis.prototype.initVis = function () {
 
     self.visG.append("g").attr("class", "xAxis axis").attr("transform", "translate(0," + self.graphH + ")");
     self.visG.append("g").attr("class", "yAxis axis");
-
+	
+	 var initialmin = d3.extent(self.data.map(function (d) {
+        return d.time;
+    }));
+    self.xScale.domain(initialmin);	
+    var brush = d3.svg.brush()
+    .x(self.xScale)
+    //.extent([d3.time.day.offset(self.data[0].time, 1), d3.time.day.offset(self.data[30].time), 30]);
     
+   
+    
+   self.visG.append("g")
+   .attr("class", "brush")
+   .call(brush.extent([d3.time.day.offset(self.data[0].time, 150), d3.time.day.offset(self.data[0].time, 190)]))
+   .selectAll("rect")
+   .attr("height",  self.graphH );
 
     // filter, aggregate, modify data
     self.wrangleData();
@@ -95,6 +112,7 @@ CountVis.prototype.initVis = function () {
     var minMaxY = [0, d3.max(self.displayData.map(function (d) {
         return d.count;
     }))];
+    console.log(minMaxY);
     self.yScale.domain(minMaxY);
 
     var minMaxX = d3.extent(self.displayData.map(function (d) {
@@ -102,9 +120,11 @@ CountVis.prototype.initVis = function () {
     }));
     self.xScale.domain(minMaxX);
     
+    console.log(minMaxX);
+    console.log("what r u doing");
     // ******* TASK 2b *******
-    // call self.addSlider
-    
+    self.addSlider(self.svg);
+    console.log("what r u doing");
     // ******* BONUS TASK 2c *******
     // define zoom
 
@@ -177,19 +197,26 @@ CountVis.prototype.addSlider = function (svg) {
 
     // Think of what is domain and what is range for the y axis slider !!
 
-    var sliderScale = d3.scale.linear().domain([1, 0.1]).range([200, 0]);
+    var sliderScale = d3.scale.linear().domain([1, 0.1]).range([270, 0]);
 
     var sliderDragged = function () {
-        var value = Math.max(0, Math.min(200, d3.event.y));
+        var value = Math.max(0, Math.min(270, d3.event.y));
 
         var sliderValue = sliderScale.invert(value);
         
         // ******* TASK 2b *******
         // the current value of the slider:
-        // console.log("Y Axis Slider value: ", sliderValue);
-        
+        console.log("Y Axis Slider value: ", sliderValue);
+        self.yScale = d3.scale.pow().exponent(sliderValue).range([self.graphH, 0]); 
+           // define the domain of scales, because they do not change for countvis
+    var minMaxY = [0, d3.max(self.data.map(function (d) {
+        return d.count;
+    }))];
+    console.log("minMaxY", minMaxY);
+    self.yScale.domain(minMaxY);
+    
         // do something here to deform the y scale
-
+		  
         d3.select(this)
             .attr("y", function () {
                 return sliderScale(sliderValue);
@@ -202,14 +229,14 @@ CountVis.prototype.addSlider = function (svg) {
 
     var sliderGroup = svg.append("g").attr({
         class: "sliderGroup",
-        "transform": "translate(" + 0 + "," + 30 + ")"
+        "transform": "translate(" + 0 + "," + 10 + ")"
     });
 
     sliderGroup.append("rect").attr({
         class: "sliderBg",
         x: 5,
         width: 10,
-        height: 200
+        height: 270
     }).style({
         fill: "lightgray"
     });
