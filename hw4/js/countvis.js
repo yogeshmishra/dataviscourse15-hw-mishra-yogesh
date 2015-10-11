@@ -93,7 +93,9 @@ CountVis.prototype.initVis = function () {
     }));
     self.xScale.domain(initialmin);	
     var brush = d3.svg.brush()
-    .x(self.xScale)
+        .x(self.xScale).on("brush", function(){
+        self.eventHandler.OnBrushMove(brush.extent()[0], brush.extent()[1]);
+        });
     //.extent([d3.time.day.offset(self.data[0].time, 1), d3.time.day.offset(self.data[30].time), 30]);
     
    
@@ -197,7 +199,7 @@ CountVis.prototype.addSlider = function (svg) {
 
     // Think of what is domain and what is range for the y axis slider !!
 
-    var sliderScale = d3.scale.linear().domain([1, 0.1]).range([270, 0]);
+    var sliderScale = d3.scale.linear().domain([1, 0.1]).range([self.graphH, 0]);
 
     var sliderDragged = function () {
         var value = Math.max(0, Math.min(270, d3.event.y));
@@ -236,7 +238,7 @@ CountVis.prototype.addSlider = function (svg) {
         class: "sliderBg",
         x: 5,
         width: 10,
-        height: 270
+        height: self.graphH
     }).style({
         fill: "lightgray"
     });
