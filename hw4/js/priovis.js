@@ -106,12 +106,11 @@ PrioVis.prototype.initVis = function () {
  * Method to wrangle the data. In this case it takes an options object
  * @param _filterFunction - a function that filters data or "null" if none
  */
-PrioVis.prototype.wrangleData = function (_filterFunction, _filterFunction2) {
+PrioVis.prototype.wrangleData = function (_filterFunction) {
     var self = this;
     
     // displayData should hold the data which is visualized
     self.displayData = self.filterAndAggregate(_filterFunction);
-    //self.displayData1 = self.filterAndAggregate(_filterFunction2);
 
 };
 
