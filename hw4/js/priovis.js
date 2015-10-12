@@ -126,7 +126,6 @@ PrioVis.prototype.updateVis = function () {
      // update the scales :
     var minMaxY = (d3.max(self.displayData) > d3.max(self.displayData1)) ? [0, d3.max(self.displayData)]
         : [0, d3.max(self.displayData1)];
-    console.log(minMaxY);
     self.yScale.domain(minMaxY);
     self.yAxis.scale(self.yScale);
 
@@ -172,7 +171,6 @@ PrioVis.prototype.updateVis = function () {
                 return "Gray";//self.metaData.priorities[i]["item-color"];
             }
         });
-    console.log(self.metaData);
     bars2.attr({
         "height": function (d) {
             return self.graphH - self.yScale(d) - 1;
@@ -194,7 +192,7 @@ PrioVis.prototype.updateVis = function () {
 PrioVis.prototype.onSelectionChange = function (selectionStart, selectionEnd){//, selectionStart2, selectionEnd2) {
     var self = this;
     var diffDays = parseInt((selectionEnd - selectionStart) / (1000 * 60 * 60 * 24));
-    self.brushWidth = diffDays;
+    self.brushWidth = Math.abs(diffDays);
     // call wrangleData with a filter function
     self.wrangleData(function (data) {
         return (data.time <= selectionEnd && data.time >= selectionStart);
@@ -247,8 +245,6 @@ PrioVis.prototype.filterAndAggregate = function (_filter) {
         self.displayData1[i] = self.sumOfPriorTies[i];
         self.displayData1[i] = ((self.displayData1[i] * self.brushWidth) / (self.data.length));
     }
-    console.log("priorties", priorties);
-    console.log("displayData1", self.displayData1);
     return	priorties;
     // accumulate all values that fulfill the filter criterion
 

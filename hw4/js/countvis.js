@@ -97,15 +97,13 @@ CountVis.prototype.initVis = function () {
         });
     //.extent([d3.time.day.offset(self.data[0].time, 1), d3.time.day.offset(self.data[30].time), 30]);
     
-    console.log(self.data.length);
    self.visG.append("g")
    .attr("class", "brush")
    .call(brush.extent([d3.time.day.offset(self.data[0].time, 150), d3.time.day.offset(self.data[0].time, 183)]))
    .selectAll("rect")
    .attr("height",  self.graphH );
 
-   console.log(d3.time.day.offset(brush.extent()));
-    console.log("brush Length =  ", (brush.extent()[1] - brush.extent()[0]));
+
     // filter, aggregate, modify data
     self.wrangleData();
 

@@ -1,7 +1,8 @@
 # Answers for Questions
 
 ### Q2a
-Type = rect   Class = background
+Type = group   Class = Brush is the interactive area.
+Group of Class Brush has two main elements: Extent and Background.
 
 ### Q2b
 Type = rect   Class = extent
