@@ -3,9 +3,9 @@
 <head>
     <title>Homework 6</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    <style>
-        
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">    
+    <style type="text/css">
+
         /* Styles that clean up the layout;
          * you can ignore these (though feel
          * free to change them if you want to): */
@@ -16,7 +16,7 @@
         span.header {
             padding: 10px;
         }
-        
+
         div.block {
             display: inline-block;
             border: 1px solid lightgray;
@@ -27,7 +27,28 @@
             width: 900px;
             height: 400px;
         }
+		#slider-horiz {
+    background:url(http://i.imgur.com/lHQxra5.png) repeat-x;
+}
+#box {
+    width:30px;
+    height:30px;
+    border:1px solid #000;
+}
+.tools a {
+    border: 1px solid black;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+    vertical-align: middle;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    color: black;
+    font-weight: bold;
+}
     </style>
+	
     <script src="lib/three.min.js"></script>
     <script src="lib/stats.min.js"></script>
     <script src="lib/Detector.js"></script>
@@ -35,23 +56,61 @@
     <script src="lib/VolumeRenderer.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
+	<script type="text/javascript" src="jscolor/jscolor.js"></script>
+		<script type="text/javascript">
+		this.firColor = {rgb : [0.32,0.67,0.98]};
+		this.secColor = {rgb : [0.56,0.98,0.123]};
+		this.thrColor = {rgb : [0.99,0.123,0.200]};
+		this.firSlider = 50;
+		this.secSlider = 50;
+		this.thrSlider = 50;
+		
+		function updateColor1(color) {
+			this.firColor = color;
+			callUpdateTransferFunction(this.firColor,this.secColor,this.thrColor,this.firSlider,this.secSlider,this.thrSlider);
+		}
+		function updateColor2(color) {
+			this.secColor = color;
+			callUpdateTransferFunction(this.firColor,this.secColor,this.thrColor,this.firSlider,this.secSlider,this.thrSlider);
+		}
+		function updateColor3(color) {
+			this.thrColor = color;
+			callUpdateTransferFunction(this.firColor,this.secColor,this.thrColor,this.firSlider,this.secSlider,this.thrSlider);
+		}	
+		function changeSlider1(color) {
+			this.firSlider = color;
+			callUpdateTransferFunction(this.firColor,this.secColor,this.thrColor,this.firSlider,this.secSlider,this.thrSlider);
+		}
+		function changeSlider2(color) {
+			this.secSlider = color;
+			callUpdateTransferFunction(this.firColor,this.secColor,this.thrColor,this.firSlider,this.secSlider,this.thrSlider);
+		}
+		function changeSlider3(color) {
+			this.thrSlider = color;
+			callUpdateTransferFunction(this.firColor,this.secColor,this.thrColor,this.firSlider,this.secSlider,this.thrSlider);
+		}
+		</script>
+	
+	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/smoothness/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+
+
 </head>
 
 <body>
     <h3>CS-5630 / CS-6630 Homework 6</h3>
-    <span class="header">Your Name</span>
-    <span class="header">Your Email Address</span>
-    <span class="header">u0123456</span>
+    <span class="header">Yogesh Mishra</span>
+    <span class="header">u1010866@eng.utah.edu</span>
+    <span class="header">u1010866</span>
 
     <br/>
     <hr/>
-    
-    <div class="block">
+
+   <div class="block">
         <div id="renderContainer"></div>
     </div>
-    
+
     <br/>
-    
+
     <div class="block">
         <span class="header">
             <select id="volumeMenu">
@@ -60,14 +119,26 @@
                 <option>teapot</option>
             </select>
         </span>
-        
+
         <br/>
         <hr/>
-        
-        <code>******* Your solution here *******</code>
-    </div>
-    
-    <script src="script.js"></script>
+		
+		
+        <code>
+		
+		Color 1 : <input class="color {onImmediateChange:'updateColor1(this);'}" value="66ff00">
+				  <input type="range"  min="1" max="100" onchange="changeSlider1(parseInt(this.value))"/>
+		Color 2 : <input class="color {onImmediateChange:'updateColor2(this);'}" value="66ff00">
+				  <input type="range"  min="1" max="100" onchange="changeSlider2(parseInt(this.value))"/>
+		Color 3 : <input class="color {onImmediateChange:'updateColor3(this);'}" value="66ff00">
+				  <input type="range"  min="1" max="100" onchange="changeSlider3(parseInt(this.value))"/>
+				  
+		</code>
+		<br>
+		
+		<script type="text/javascript" src="script.js"></script>
+	
+
 </body>
 
 </html>
